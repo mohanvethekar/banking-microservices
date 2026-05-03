@@ -22,4 +22,9 @@ public class AccountController {
     public Account get(@PathVariable Long id) {
         return service.getAccount(id);
     }
+
+    @GetMapping("/test")
+    public String test(){
+        return service.callAuth();
+    }
 }

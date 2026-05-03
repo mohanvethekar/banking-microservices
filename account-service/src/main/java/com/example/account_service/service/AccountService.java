@@ -1,5 +1,6 @@
 package com.example.account_service.service;
 
+import com.example.account_service.client.AuthClient;
 import com.example.account_service.entity.Account;
 import com.example.account_service.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,15 @@ public class AccountService {
     @Autowired
     private AccountRepository repository;
 
+    @Autowired
+    private AuthClient authClient;
+
     public Account createAccount(Account account) {
         return repository.save(account);
+    }
+
+    public String callAuth() {
+        return authClient.testAuth();
     }
 
     public Account getAccount(Long id) {
