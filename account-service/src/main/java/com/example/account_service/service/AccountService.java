@@ -20,8 +20,8 @@ public class AccountService {
         return repository.save(account);
     }
 
-    public String callAuth() {
-        return authClient.testAuth();
+    public String callAuth(String authHeader) {
+        return authClient.validateToken(authHeader);
     }
 
     public Account getAccount(Long id) {

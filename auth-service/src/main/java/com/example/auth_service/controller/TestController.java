@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @GetMapping("/test")
+    @GetMapping("/auth/validate")
     public String test() {
-        return "JWT is working";
+        return " Feing client JWT is working";
     }
 }
