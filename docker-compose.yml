@@ -11,7 +11,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - mysql_data:/var/lib/mysql   # ✅ PERSIST DATA
+      - mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -25,11 +25,13 @@ services:
       - "8081:8081"
     depends_on:
       mysql:
-        condition: service_healthy   # ✅ wait for DB
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/banking_db
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: Root@1234
+    volumes:
+      - ./logs/account-service:/app/logs
     restart: always
 
   auth-service:
@@ -39,11 +41,24 @@ services:
       - "8082:8082"
     depends_on:
       mysql:
-        condition: service_healthy   # ✅ wait for DB
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/banking_db
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: Root@1234
+    volumes:
+      - ./logs/auth-service:/app/logs
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8083:8083"
+    depends_on:
+      - auth-service
+      - account-service
+    volumes:
+      - ./logs/api-gateway:/app/log
 
 volumes:
-  mysql_data:   # ✅ define volume
+  mysql_data:
